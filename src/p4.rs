@@ -27,13 +27,18 @@ const REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"(\d+)-(\d+) (\w): (\d+)").u
 
 impl<'a> PWTest<'a> {
     fn new(s: &'a str) -> Self {
-        let m = REGEX.captures(&s).unwrap();
+        let m: Vec<_> = REGEX
+            .captures(&s)
+            .unwrap()
+            .iter()
+            .map(|x| x.unwrap().as_str())
+            .collect();
 
         Self {
-            min: m.get(1).unwrap().as_str().parse().unwrap(),
-            max: m.get(2).unwrap().as_str().parse().unwrap(),
-            letter: m.get(3).unwrap().as_str().chars().nth(0).unwrap(),
-            text: m.get(4).unwrap().as_str(),
+            min: m[1].parse().unwrap(),
+            max: m[2].parse().unwrap(),
+            letter: m[3].chars().nth(0).unwrap(),
+            text: m[4],
         }
     }
 }
