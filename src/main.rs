@@ -1,3 +1,4 @@
+#![feature(never_type, once_cell)]
 mod p4;
 
 fn input(day: i64) -> String {

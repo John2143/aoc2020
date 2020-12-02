@@ -1,3 +1,7 @@
+use std::lazy::Lazy;
+
+use regex::Regex;
+
 #[derive(Debug)]
 struct PWTest<'a> {
     min: usize,
@@ -11,7 +15,7 @@ impl<'a> PWTest<'a> {
         let a = self.text.chars().nth(self.min - 1).unwrap();
         let b = self.text.chars().nth(self.max - 1).unwrap();
 
-        if a != b && (a == self.letter || b == self.letter){
+        if a != b && (a == self.letter || b == self.letter) {
             1
         } else {
             0
@@ -19,24 +23,25 @@ impl<'a> PWTest<'a> {
     }
 }
 
-fn from_str(s: &str) -> PWTest<'_> {
-    let parts: Vec<_> = s.split(" ").collect();
-    assert!(parts.len() == 3);
-    let ranges: Vec<_> = parts[0].split("-").collect();
-    assert!(ranges.len() == 2);
+const REGEX: Lazy<Regex> = Lazy::new(|| Regex::new(r"(\d+)-(\d+) (\w): (\d+)").unwrap());
 
-    PWTest {
-        min: ranges[0].parse().unwrap(),
-        max: ranges[1].parse().unwrap(),
-        letter: parts[1].chars().nth(0).unwrap(),
-        text: parts[2],
+impl<'a> PWTest<'a> {
+    fn new(s: &'a str) -> Self {
+        let m = REGEX.captures(&s).unwrap();
+
+        Self {
+            min: m.get(1).unwrap().as_str().parse().unwrap(),
+            max: m.get(2).unwrap().as_str().parse().unwrap(),
+            letter: m.get(3).unwrap().as_str().chars().nth(0).unwrap(),
+            text: m.get(4).unwrap().as_str(),
+        }
     }
 }
 
 pub fn main() {
     let valids: usize = crate::input(3)
         .lines()
-        .map(from_str)
+        .map(PWTest::new)
         .map(|x| x.validate())
         .sum();
     println!("valid {}", valids);
