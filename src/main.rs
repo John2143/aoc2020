@@ -1,5 +1,9 @@
-mod p2;
+mod p4;
+
+fn input(day: i64) -> String {
+    std::fs::read_to_string(format!("./data/d{}.txt", day)).unwrap()
+}
 
 fn main() {
-    p2::main();
+    p4::main();
 }

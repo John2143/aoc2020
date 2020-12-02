@@ -11,6 +11,7 @@ pub fn main() {
         for b in &numbers {
             if a + b == 2020 {
                 println!("a {}, b {}, a * b {}", a, b, a * b);
+                panic!()
             }
         }
     }
