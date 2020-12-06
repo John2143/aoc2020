@@ -27,7 +27,20 @@ impl<'a> Map<'a> {
 
     fn xy(&self, x: usize, y: usize) -> Option<char> {
         let line = self.0.get(y)?;
-        line.chars().nth(x % line.len())
+        let xc = x % line.len();
+        for (i, c) in line.chars().enumerate() {
+            use colour::*;
+            match (i, c) {
+                (q, _) if q == xc => red!("X"),
+                (_, '.') => yellow!("."),
+                (_, '#') => yellow!("#"),
+                (_, _) => unimplemented!(),
+
+            }
+        }
+
+        println!();
+        line.chars().nth(xc)
     }
 
     fn slope_iter(&'a self, dx: usize, dy: usize) -> SlopeIter<'a> {
