@@ -1,10 +1,10 @@
-#![feature(never_type, once_cell)]
-mod p8;
+#![feature(never_type, once_cell, array_chunks)]
+mod p9;
 
 fn input(day: i64) -> String {
     std::fs::read_to_string(format!("./data/d{}.txt", day)).unwrap()
 }
 
 fn main() {
-    p8::main();
+    p9::main();
 }
